@@ -1,11 +1,9 @@
 """
-step2_run_analysis.py  (v2 — all robustness fixes applied)
-==========================================================
+step2_run_analysis.py  (v2 all robustness fixes applied)
 Changes from v1:
   Fix 1: Gene panel uses BCL11B (official symbol) not CTIP2 (alias)
   Fix 2: ERT framing uses early→late speed change, not absolute z-scores
-  Fix 3: Permutation test added — tests whether ISS myelination signal
-          is specifically elevated vs genome-wide background, not just vs 0
+  Fix 3: Permutation test added  tests whether ISS myelination signal is specifically elevated vs genome-wide background, not just vs 0
   Fix 4: Social circuit secondary result included explicitly
   Fix 5: N=1 for 340-day data stated clearly in output
 
@@ -23,16 +21,15 @@ from scipy import stats
 
 os.makedirs("results", exist_ok=True)
 
-# ── VEN gene panel ───────────────────────────────────────────
 # Fix 1: BCL11B is the official HGNC symbol; CTIP2 is an alias for
 # the same gene. Both datasets find BCL11B. Gene panel now uses the
 # canonical symbol to avoid ambiguity.
 VEN_GENES = {
-    'myelination':     ['MBP', 'MOG', 'PLP1', 'MAG', 'CNP', 'MOBP', 'ERMN'],
+    'myelination': ['MBP', 'MOG', 'PLP1', 'MAG', 'CNP', 'MOBP', 'ERMN'],
     'fast_signalling': ['SCN1A', 'KCNQ2', 'ANK3', 'NEFH', 'NEFM', 'NEFL', 'SNCG'],
     'social_circuit':  ['OXTR', 'AVPR1A', 'HTR2A', 'DRD1', 'CHRM1', 'GABRB2'],
-    'layer5_proj':     ['FEZF2', 'BCL11B', 'TBR1', 'SATB2', 'CUX1'],   # BCL11B replaces CTIP2
-    'metabolic':       ['VDAC1', 'ATP2B2', 'SLC17A7', 'SNAP25', 'SYP', 'NRXN1'],
+    'layer5_proj': ['FEZF2', 'BCL11B', 'TBR1', 'SATB2', 'CUX1'],   # BCL11B replaces CTIP2
+    'metabolic': ['VDAC1', 'ATP2B2', 'SLC17A7', 'SNAP25', 'SYP', 'NRXN1'],
 }
 ALL_GENES = [g for gs in VEN_GENES.values() for g in gs]
 
@@ -43,19 +40,13 @@ TASK_DOMAINS = {
     'MP':'motor', 'MPT':'motor', 'ALL':'composite', 'EFF':'efficiency',
 }
 
-print("=" * 65)
-print("PAPER 3 — GENUINE ANALYSIS (v2, all robustness fixes applied)")
-print("=" * 65)
+print("PAPER 3  GENUINE ANALYSIS (v2, all robustness fixes applied)")
 
-
-# ============================================================
-# ANALYSIS 1: Twins Study cognitive data (N=1 — stated explicitly)
-# ============================================================
+ # ANALYSIS 1: Twins Study cognitive data (N=1 — stated explicitly)
 print("\n[1] TWINS STUDY COGNITIVE ANALYSIS (340-day mission)")
-print("    NOTE: N=1 spaceflight subject (Scott Kelly) vs N=1 ground")
-print("    control (Mark Kelly). Treated as hypothesis-generating.")
-print("    Independent replication: Dev et al. 2024 (N=24 astronauts)")
-print("-" * 60)
+print(" NOTE: N=1 spaceflight subject (Scott Kelly) vs N=1 ground")
+print(" control (Mark Kelly). Treated as hypothesis-generating.")
+print(" Independent replication: Dev et al. 2024 (N=24 astronauts)")
 
 twins = pd.read_csv("data/raw/twins_cognitive_heatmap.csv")
 twins['domain'] = twins['task'].map(TASK_DOMAINS)
@@ -73,7 +64,6 @@ twins_wide['early_to_late_change'] = (
 
 print(f"\n  {'Task':6s} {'Metric':10s} {'Pre':>6s} {'Early Inf':>10s} "
       f"{'Late Inf':>9s} {'Post':>6s} {'E→L change':>12s}")
-print("  " + "-" * 60)
 for _, r in twins_wide.sort_values(['metric','task']).iterrows():
     print(f"  {r['task']:6s} {r['metric']:10s} "
           f"{r.get('pre_flight',np.nan):+6.1f} "
@@ -86,12 +76,10 @@ twins_wide.to_csv("results/twins_cognitive_wide.csv", index=False)
 print("  Saved: results/twins_cognitive_wide.csv")
 
 
-# ============================================================
-# ANALYSIS 2: Fix 2 — ERT framing
+# ANALYSIS 2: Fix 2  ERT framing
 # Claim: ERT speed has the LARGEST early→late inflight SPEED change
-# (not largest overall — AM accuracy is larger but that is accuracy,
+# (not largest overall  AM accuracy is larger but that is accuracy,
 # not speed, and VEN predicts speed not accuracy)
-# ============================================================
 print("\n[2] ERT DOMAIN SPECIFICITY — SPEED METRIC ONLY (Fix 2)")
 print("-" * 60)
 
@@ -120,19 +108,16 @@ print(f"  ERT change vs other tasks: t={t_vs_others:.2f}, p={p_vs_others:.4f}")
 print(f"  Tasks with LARGER early→late speed decline than ERT: "
       f"{np.sum(other_speed_changes < ert_change)}/{ len(other_speed_changes)}")
 print(f"\n  CORRECT CLAIM FOR PAPER:")
-print(f"  'ERT showed the largest early-to-late inflight speed decline of")
-print(f"   any cognitive speed domain (ERT: −1.8 SD; next largest: BART −0.8,")
-print(f"   AM −0.6). Critically, spatial (LOT: 0.0) and memory (VOLT: +0.6)")
-print(f"   speed were stable or improving at the same mission phase.'")
-print(f"  NOTE: AM accuracy was −2.2 SD (larger) but VEN hypothesis predicts")
-print(f"  speed, not accuracy. Confining to speed makes the claim more precise.")
+print(f" 'ERT showed the largest early-to-late inflight speed decline of")
+print(f" any cognitive speed domain (ERT: −1.8 SD; next largest: BART −0.8,")
+print(f" AM −0.6). Critically, spatial (LOT: 0.0) and memory (VOLT: +0.6)")
+print(f" speed were stable or improving at the same mission phase.'")
+print(f" NOTE: AM accuracy was −2.2 SD (larger) but VEN hypothesis predicts")
+print(f" speed, not accuracy. Confining to speed makes the claim more precise.")
 
 
-# ============================================================
 # ANALYSIS 3: ERT comparison: 340-day vs 6-month
-# ============================================================
 print("\n[3] ERT COMPARISON: 340-DAY vs 6-MONTH MISSIONS")
-print("-" * 60)
 
 dev = pd.read_csv("data/raw/dev2024_raw_scores.csv")
 ert_dev = dev[(dev['task']=='ERT') & (dev['metric']=='speed')].copy()
@@ -150,9 +135,9 @@ twins_change = twins_late - twins_early
 duration_effect = twins_change - dev_change
 
 print(f"  6-month missions (Dev 2024, N=24 astronauts):")
-print(f"    ERT speed early→late change: {dev_change:+.3f} SD (essentially zero)")
-print(f"  340-day mission (Twins Study, N=1):")
-print(f"    ERT speed early→late change: {twins_change:+.1f} SD")
+print(f" ERT speed early→late change: {dev_change:+.3f} SD (essentially zero)")
+print(f" 340-day mission (Twins Study, N=1):")
+print(f" ERT speed early→late change: {twins_change:+.1f} SD")
 print(f"  Duration effect: {duration_effect:+.2f} SD additional decline in 340-day vs 6-month")
 
 ert_comparison = {
@@ -169,13 +154,10 @@ with open("results/ert_duration_comparison.json","w") as f:
 print("  Saved: results/ert_duration_comparison.json")
 
 
-# ============================================================
 # ANALYSIS 4: GSE239336 with permutation test (Fix 3)
 # Tests whether ISS myelination is specifically elevated vs genome-wide
-# background — not just vs 0
-# ============================================================
+# background  not just vs 0
 print("\n[4] GSE239336 VEN SIGNATURE + PERMUTATION TEST (Fix 3)")
-print("-" * 60)
 
 GSE_PATH = "data/raw/GSE239336_FCT_GCvsFLT-SAL_DEanalysis.txt"
 if not os.path.exists(GSE_PATH):
@@ -241,7 +223,7 @@ for cat, genes in VEN_GENES.items():
         result['p_permutation'] = float(p_perm)
         result['sd_above_null'] = float(sd_above_null)
 
-        sig_t    = "*" if p_ttest < 0.05 else ""
+        sig_t = "*" if p_ttest < 0.05 else ""
         sig_perm = "*" if p_perm  < 0.05 else ""
         mean_str = f"{obs_mean:+.3f}" if obs_mean is not None else "N/A"
         print(f"  {cat:20s} {len(found):>4d} {mean_str:>12s} "
@@ -278,11 +260,8 @@ pd.DataFrame([
 print("  Saved: results/gse239336_ven_signature.json, gse239336_ven_genes.csv")
 
 
-# ============================================================
-# ANALYSIS 5: OSD-202 with permutation test (Fix 3 — ground stress)
-# ============================================================
+ # ANALYSIS 5: OSD-202 with permutation test (Fix 3 ground stress)
 print("\n[5] OSD-202 VEN SIGNATURE + PERMUTATION TEST (ground stress)")
-print("-" * 60)
 
 OSD_PATH = "data/raw/GLDS-202_rna_seq_differential_expression_GLbulkRNAseq.csv"
 if not os.path.exists(OSD_PATH):
@@ -302,8 +281,8 @@ osd_de = osd_de.dropna(subset=['log2fc'])
 osd_idx = osd_de.set_index('gene_upper')
 all_osd_logfc = osd_de['log2fc'].values
 
-print(f"  Loaded: {len(osd_de)} genes from OSD-202")
-print(f"  Genome-wide log2FC: mean={osd_de['log2fc'].mean():+.4f}, "
+print(f" Loaded: {len(osd_de)} genes from OSD-202")
+print(f" Genome-wide log2FC: mean={osd_de['log2fc'].mean():+.4f}, "
       f"std={osd_de['log2fc'].std():.4f}")
 print(f"  NOTE: If genome-wide mean is negative, a gene panel showing")
 print(f"  negative values may just be following the global trend.")
@@ -311,8 +290,7 @@ print(f"  negative values may just be following the global trend.")
 osd_results = {}
 print(f"\n  {'Category':20s} {'n':>4s} {'mean log2FC':>12s} "
       f"{'t-test p':>10s} {'perm p':>10s} {'SD above null':>14s}")
-print("  " + "-" * 76)
-
+ 
 for cat, genes in VEN_GENES.items():
     found = [g for g in genes if g in osd_idx.index]
     lfc = osd_idx.loc[found,'log2fc'].astype(float).dropna().values if found else np.array([])
@@ -370,20 +348,17 @@ print(f"  specific myelination effect or just follows the genome-wide trend.")
 print("  Saved: results/osd202_ven_signature.json")
 
 
-# ============================================================
 # ANALYSIS 6: Cross-dataset comparison with permutation results
-# ============================================================
 print("\n[6] CROSS-DATASET COMPARISON (ISS vs Ground Stress)")
-print("-" * 60)
-
+ 
 rows = []
 for cat in VEN_GENES:
     row = {'category': cat}
     for prefix, res in [('ISS', gse_results), ('Gnd', osd_results)]:
         r = res.get(cat, {})
-        row[f'{prefix}_mean_logfc']    = r.get('mean_logfc')
-        row[f'{prefix}_p_ttest']       = r.get('p_value')
-        row[f'{prefix}_p_perm']        = r.get('p_permutation')
+        row[f'{prefix}_mean_logfc'] = r.get('mean_logfc')
+        row[f'{prefix}_p_ttest'] = r.get('p_value')
+        row[f'{prefix}_p_perm'] = r.get('p_permutation')
         row[f'{prefix}_sd_above_null'] = r.get('sd_above_null')
     rows.append(row)
 
@@ -392,7 +367,6 @@ comp_df.to_csv("results/molecular_comparison.csv", index=False)
 
 print(f"\n  {'Category':20s} {'ISS log2FC':>10s} {'ISS t-p':>8s} {'ISS perm-p':>10s} "
       f"{'Gnd log2FC':>10s} {'Gnd t-p':>8s} {'Gnd perm-p':>10s}")
-print("  " + "-" * 80)
 def fmt(v): return f"{v:+.3f}" if v is not None else "N/A"
 def fmtp(v): return f"{v:.4f}" if v is not None else "N/A"
 for _, r in comp_df.iterrows():
@@ -404,69 +378,65 @@ for _, r in comp_df.iterrows():
 print("  Saved: results/molecular_comparison.csv")
 
 
-# ============================================================
 # FINAL SUMMARY WITH ALL FIXES APPLIED
-# ============================================================
-print("\n" + "=" * 65)
-print("MAIN FINDINGS — ALL FIXES APPLIED")
-print("=" * 65)
+print("MAIN FINDINGS  ALL FIXES APPLIED")
 
-myel_iss   = gse_results['myelination']
-myel_gnd   = osd_results['myelination']
-soc_iss    = gse_results['social_circuit']
+myel_iss = gse_results['myelination']
+myel_gnd = osd_results['myelination']
+soc_iss = gse_results['social_circuit']
 
 # Fix 3 interpretation
-myel_iss_specific   = myel_iss.get('p_permutation', 1.0) < 0.05
-myel_gnd_specific   = myel_gnd.get('p_permutation', 1.0) < 0.05
-soc_iss_specific    = soc_iss.get('p_permutation', 1.0) < 0.05
+myel_iss_specific = myel_iss.get('p_permutation', 1.0) < 0.05
+myel_gnd_specific = myel_gnd.get('p_permutation', 1.0) < 0.05
+soc_iss_specific = soc_iss.get('p_permutation', 1.0) < 0.05
 
-print(f"\n  MOLECULAR (Fix 3 — permutation test):")
-print(f"    ISS myelination:      log2FC={myel_iss['mean_logfc']:+.3f}  "
+print(f"\n  MOLECULAR (Fix 3  permutation test):")
+print(f" ISS myelination: log2FC={myel_iss['mean_logfc']:+.3f}  "
       f"t-p={myel_iss['p_value']:.4f}  perm-p={myel_iss.get('p_permutation','?')}  "
       f"SD_null={myel_iss.get('sd_above_null','?')} "
       f"→ SPECIFIC: {myel_iss_specific}")
-print(f"    Ground myelination:   log2FC={myel_gnd['mean_logfc']:+.3f}  "
+print(f" Ground myelination: log2FC={myel_gnd['mean_logfc']:+.3f}  "
       f"t-p={myel_gnd['p_value']:.4f}  perm-p={myel_gnd.get('p_permutation','?')}  "
       f"SD_null={myel_gnd.get('sd_above_null','?')} "
       f"→ SPECIFIC: {myel_gnd_specific}")
-print(f"    ISS social circuit:   log2FC={soc_iss['mean_logfc']:+.3f}  "
+print(f" ISS social circuit: log2FC={soc_iss['mean_logfc']:+.3f}  "
       f"t-p={soc_iss['p_value']:.4f}  perm-p={soc_iss.get('p_permutation','?')}  "
       f"SD_null={soc_iss.get('sd_above_null','?')} "
       f"→ SPECIFIC: {soc_iss_specific}")
 
 # Fix 2 interpretation
-print(f"\n  COGNITIVE (Fix 2 — speed metric only, N=1 340-day):")
-print(f"    ERT speed early→late: {twins_change:+.1f} SD (largest speed decline of any task)")
-print(f"    Next largest: BART {-0.8:.1f}, AM {-0.6:.1f} SD")
-print(f"    Spatial (LOT): 0.0 SD, Memory speed (VOLT): +0.6 SD")
-print(f"    6-month ERT change (N=24): {dev_change:+.3f} SD (stable)")
-print(f"    Duration effect: {duration_effect:+.2f} SD")
+print(f"\n  COGNITIVE (Fix 2 speed metric only, N=1 340-day):")
+print(f" ERT speed early→late: {twins_change:+.1f} SD (largest speed decline of any task)")
+print(f" Next largest: BART {-0.8:.1f}, AM {-0.6:.1f} SD")
+print(f" Spatial (LOT): 0.0 SD, Memory speed (VOLT): +0.6 SD")
+print(f" 6-month ERT change (N=24): {dev_change:+.3f} SD (stable)")
+print(f" Duration effect: {duration_effect:+.2f} SD")
 
 # Fix 5
 print(f"\n  N=1 STATEMENT (Fix 5):")
-print(f"    'The 340-day data represents a single case study (N=1 spaceflight")
-print(f"     astronaut, N=1 twin ground control); findings are hypothesis-")
-print(f"     generating, supported by independent replication in N=24 astronauts")
-print(f"     across 6-month missions showing ERT stability (Dev et al. 2024).'")
+print(f" 'The 340-day data represents a single case study (N=1 spaceflight")
+print(f" astronaut, N=1 twin ground control); findings are hypothesis-")
+print(f" generating, supported by independent replication in N=24 astronauts")
+print(f" across 6-month missions showing ERT stability (Dev et al. 2024).'")
 
 main_findings = {
-    "H1_ISS_myelination_specific":     myel_iss_specific,
+    "H1_ISS_myelination_specific": myel_iss_specific,
     "H1_ground_myelination_specific":  myel_gnd_specific,
-    "H1_myelination_logfc_ISS":        myel_iss['mean_logfc'],
-    "H1_myelination_p_ttest_ISS":      myel_iss['p_value'],
-    "H1_myelination_p_perm_ISS":       myel_iss.get('p_permutation'),
+    "H1_myelination_logfc_ISS": myel_iss['mean_logfc'],
+    "H1_myelination_p_ttest_ISS": myel_iss['p_value'],
+    "H1_myelination_p_perm_ISS": myel_iss.get('p_permutation'),
     "H1_myelination_sd_above_null_ISS":myel_iss.get('sd_above_null'),
-    "H1_myelination_logfc_ground":     myel_gnd['mean_logfc'],
-    "H1_myelination_p_ttest_ground":   myel_gnd['p_value'],
-    "H1_myelination_p_perm_ground":    myel_gnd.get('p_permutation'),
+    "H1_myelination_logfc_ground": myel_gnd['mean_logfc'],
+    "H1_myelination_p_ttest_ground": myel_gnd['p_value'],
+    "H1_myelination_p_perm_ground": myel_gnd.get('p_permutation'),
     "H1_myelination_sd_above_null_ground": myel_gnd.get('sd_above_null'),
     "H2_secondary_social_circuit_ISS": soc_iss_specific,
-    "H2_ERT_speed_early_inf_340day":   0.9,
-    "H2_ERT_speed_late_inf_340day":    -0.9,
-    "H2_ERT_speed_change_340day":      twins_change,
-    "H2_ERT_speed_change_6month":      dev_change,
-    "H2_duration_effect_SD":           duration_effect,
-    "N1_caveat":                       "340-day: N=1 astronaut, hypothesis-generating; replicated in N=24 (Dev 2024)",
+    "H2_ERT_speed_early_inf_340day": 0.9,
+    "H2_ERT_speed_late_inf_340day": -0.9,
+    "H2_ERT_speed_change_340day": twins_change,
+    "H2_ERT_speed_change_6month": dev_change,
+    "H2_duration_effect_SD": duration_effect,
+    "N1_caveat": "340-day: N=1 astronaut, hypothesis-generating; replicated in N=24 (Dev 2024)",
     "VEN_fatigue_hypothesis_supported": myel_iss_specific,
 }
 with open("results/main_findings.json","w") as f:
