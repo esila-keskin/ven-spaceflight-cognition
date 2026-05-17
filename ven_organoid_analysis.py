@@ -1,34 +1,25 @@
 """
-VEN Gene Panel Analysis — GSE259421
+VEN Gene Panel Analysis GSE259421
 Human iPSC-derived cortical organoids on the ISS (Marotta et al. 2024)
 
-Author : Esila Keskin, UWE Bristol
-Contact: esila2.keskin@live.uwe.ac.uk
-Date   : May 2026
-
 REPRODUCIBILITY NOTES
----------------------
 * Gene symbol mapping uses MyGene.info (mygene Python package),
   a standard, citable bioinformatics resource (Xin et al. 2016).
 * VEN gene panel is pre-defined from Keskin (2026) Fast Lane Hypothesis
-  and Keskin (2026) VEN Fatigue Hypothesis — NOT selected post-hoc.
+  and Keskin (2026) VEN Fatigue Hypothesis, NOT selected post-hoc.
 * Permutation test (N=10,000) follows identical methodology to
   Keskin (2026) VEN Fatigue Hypothesis, enabling direct comparison.
 * Random seed fixed at 42 for full reproducibility.
 * All intermediate files saved for audit.
 
-DEPENDENCIES
-------------
-    pip install pandas numpy scipy matplotlib mygene
+DEPENDENCIES: pip install pandas numpy scipy matplotlib mygene
 
 USAGE
------
     Place GSE259421_all_counts.txt (or .txt.gz) in the same directory.
     Run: python ven_organoid_analysis.py
     Results saved to: ./results/
 
 CITATION FOR GENE MAPPING
---------------------------
     Xin J, Mark A, Afrasiabi C, et al. High-performance web services for
     querying gene and variant annotation. Genome Biology. 2016;17:91.
     https://mygene.info
@@ -46,14 +37,11 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore")
 
-# ── Output directory ───────────────────────────────────────────────────────────
 os.makedirs("results", exist_ok=True)
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 1: SAMPLE METADATA
 # Sequential mapping: BAM file order → GEO sample order (GSM8115892–GSM8115933)
 # Source: GSE259421 GEO page, verified manually against 42 listed samples
-# ══════════════════════════════════════════════════════════════════════════════
 
 BAM_ORDER = [
     "a1","a13","a14","a15","a16","a2","a23","a24","a25","a29",
@@ -118,16 +106,14 @@ meta_df = pd.DataFrame(
     index=[b + ".bam" for b in BAM_ORDER]
 )
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2: VEN GENE PANEL
 # Pre-defined in Keskin (2026) Fast Lane Hypothesis & VEN Fatigue Hypothesis.
-# These gene symbols are looked up programmatically — NOT by Ensembl ID.
-# ══════════════════════════════════════════════════════════════════════════════
+# These gene symbols are looked up programmatically  NOT by Ensembl ID.
 
 VEN_PANEL = {
-    "Myelination":      ["MBP","MOG","PLP1","MAG","CNP","MOBP","ERMN"],
-    "FastSignalling":   ["SCN1A","KCNQ2","ANK3","NEFH","NEFM","NEFL","SNCG"],
-    "SocialCircuit":    ["OXTR","AVPR1A","HTR2A","DRD1","CHRM1","GABRB2"],
+    "Myelination": ["MBP","MOG","PLP1","MAG","CNP","MOBP","ERMN"],
+    "FastSignalling": ["SCN1A","KCNQ2","ANK3","NEFH","NEFM","NEFL","SNCG"],
+    "SocialCircuit": ["OXTR","AVPR1A","HTR2A","DRD1","CHRM1","GABRB2"],
     "LayerVProjection": ["FEZF2","BCL11B","TBR1","SATB2","CUX1"],
     "MetabolicSupport": ["VDAC1","ATP2B2","SLC17A7","SNAP25","SYP","NRXN1"],
 }
@@ -138,9 +124,7 @@ INDIVIDUAL_MARKERS = ["NOS1"]
 
 ALL_PANEL_GENES = [g for genes in VEN_PANEL.values() for g in genes]
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 3: LOAD COUNTS FILE
-# ══════════════════════════════════════════════════════════════════════════════
 
 def find_counts_file():
     for fname in ["GSE259421_all_counts.txt","GSE259421_all_counts.txt.gz"]:
@@ -149,7 +133,6 @@ def find_counts_file():
     sys.exit("ERROR: Could not find GSE259421_all_counts.txt — place it in this directory.")
 
 counts_file = find_counts_file()
-print(f"\n{'='*60}")
 print(f"Loading: {counts_file}")
 raw = pd.read_csv(counts_file, sep="\t", comment="#", index_col=0)
 
@@ -166,12 +149,10 @@ if raw.index[0].startswith("ENSG"):
     raw.index = raw.index.str.replace(r"\.\d+$", "", regex=True)
     print("Stripped Ensembl version suffixes.")
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 4: GENE SYMBOL MAPPING
 # Uses MyGene.info via the mygene Python package.
-# Maps ALL Ensembl IDs in the matrix — not just VEN panel genes.
+# Maps ALL Ensembl IDs in the matrix not just VEN panel genes.
 # Mapping saved to results/ensembl_to_symbol.csv for full transparency.
-# ══════════════════════════════════════════════════════════════════════════════
 
 MAPPING_CACHE = "results/ensembl_to_symbol.csv"
 
@@ -234,9 +215,7 @@ print(f"\nVEN panel genes found in data: {len(found)}/{len(ALL_PANEL_GENES + IND
 if found:   print(f"  Found:   {found}")
 if missing: print(f"  Missing: {missing} (low/absent expression or mapping gap)")
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 5: NORMALISATION (CPM + log2)
-# ══════════════════════════════════════════════════════════════════════════════
 
 cpm = raw.div(raw.sum(axis=0), axis=1) * 1_000_000
 log2cpm = np.log2(cpm + 1)
@@ -245,9 +224,7 @@ print(f"\nNormalisation: CPM + log2(CPM+1)")
 print(f"Library sizes (mean ± SD): "
       f"{raw.sum(axis=0).mean()/1e6:.1f}M ± {raw.sum(axis=0).std()/1e6:.1f}M reads")
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 6: SAMPLE SELECTION & LOG2FC
-# ══════════════════════════════════════════════════════════════════════════════
 
 def select_samples(microglia_group, condition):
     mask = (
@@ -287,13 +264,10 @@ for grp, fc in fc_groups.items():
     fc.rename("log2FC").to_csv(f"results/all_genes_log2FC_{grp}.csv", header=True)
 print("\nAll-gene log2FC vectors saved to results/all_genes_log2FC_*.csv")
 
-# ══════════════════════════════════════════════════════════════════════════════
 # SECTION 7: VEN PANEL ANALYSIS
 # One-sample t-test + permutation test (N=10,000)
 # Permutation tests the SPECIFICITY of the VEN panel signal:
-#   Is the category mean more extreme than expected from a random gene set
-#   of the same size drawn from the full transcriptome?
-# ══════════════════════════════════════════════════════════════════════════════
+#   Is the category mean more extreme than expected from a random gene set of the same size drawn from the full transcriptome?
 
 N_PERM  = 10_000
 RNG_SEED = 42
@@ -342,35 +316,34 @@ def run_panel_analysis(fc_series, panel_dict, n_perm=N_PERM):
             for _ in range(n_perm)
         ])
         null_mean  = null_means.mean()
-        null_sd    = null_means.std()
+        null_sd = null_means.std()
         sd_above   = (category_mean - null_mean) / null_sd if null_sd > 0 else np.nan
-        perm_p     = np.mean(
+        perm_p = np.mean(
             np.abs(null_means - null_mean) >= np.abs(category_mean - null_mean)
         )
 
         # Significance label
-        if perm_p < 0.001:    sig = "***"
-        elif perm_p < 0.01:   sig = "**"
-        elif perm_p < 0.05:   sig = "*"
-        elif perm_p < 0.10:   sig = "†"
+        if perm_p < 0.001: sig = "***"
+        elif perm_p < 0.01: sig = "**"
+        elif perm_p < 0.05: sig = "*"
+        elif perm_p < 0.10: sig = "†"
         else:                  sig = ""
 
         rows.append({
-            "Category":       category,
-            "n_panel":        n_genes_panel,
-            "n_present":      n_genes_present,
-            "mean_log2FC":    round(category_mean, 4),
-            "t_stat":         round(t_stat, 3) if not np.isnan(t_stat) else np.nan,
-            "p_ttest":        round(p_ttest, 4) if not np.isnan(p_ttest) else np.nan,
+            "Category": category,
+            "n_panel": n_genes_panel,
+            "n_present": n_genes_present,
+            "mean_log2FC": round(category_mean, 4),
+            "t_stat": round(t_stat, 3) if not np.isnan(t_stat) else np.nan,
+            "p_ttest": round(p_ttest, 4) if not np.isnan(p_ttest) else np.nan,
             "SD_above_null":  round(sd_above, 3),
-            "perm_p":         round(perm_p, 4),
-            "sig":            sig,
+            "perm_p": round(perm_p, 4),
+            "sig": sig,
             "genes_present":  ", ".join(present),
         })
 
     return pd.DataFrame(rows)
 
-# ── Run analysis for all three groups ─────────────────────────────────────────
 panel_results = {}
 for group_name, fc in fc_groups.items():
     print(f"\n{'='*60}")
@@ -382,7 +355,6 @@ for group_name, fc in fc_groups.items():
               "SD_above_null","perm_p","sig"]].to_string(index=False))
     df.to_csv(f"results/VEN_panel_{group_name}.csv", index=False)
 
-# ── Individual marker gene report ──────────────────────────────────────────────
 print(f"\n{'='*60}")
 print("INDIVIDUAL MARKER GENES")
 print(f"{'='*60}")
@@ -402,11 +374,8 @@ except Exception as e:
     print(marker_df.to_string())
 marker_df.to_csv("results/individual_genes_all.csv", index=False)
 
-# ── Combined summary (paper-ready) ────────────────────────────────────────────
-print(f"\n{'='*60}")
-print("PAPER-READY SUMMARY TABLE (Combined group)")
-print(f"{'='*60}")
-summary = panel_results["Combined"][[
+-print("PAPER-READY SUMMARY TABLE (Combined group)")
+-summary = panel_results["Combined"][[
     "Category","n_present","mean_log2FC","t_stat","p_ttest",
     "SD_above_null","perm_p","sig","genes_present"
 ]].copy()
@@ -417,7 +386,6 @@ summary.columns = [
 print(summary.to_string(index=False))
 summary.to_csv("results/SUMMARY_TABLE_combined.csv", index=False)
 
-# ── Save analysis metadata ─────────────────────────────────────────────────────
 metadata = {
     "dataset": "GSE259421",
     "paper": "Marotta et al. Stem Cells Transl Med 2024",
@@ -430,11 +398,11 @@ metadata = {
     "VEN_panel_source": "Keskin 2026 Fast Lane Hypothesis + VEN Fatigue Hypothesis",
     "sample_groups_analysed": {
         "NoMicroglia": {
-            "LEO_n":    len(select_samples("NoMicroglia","LEO")),
+            "LEO_n": len(select_samples("NoMicroglia","LEO")),
             "Ground_n": len(select_samples("NoMicroglia","Ground"))
         },
         "WithMicroglia": {
-            "LEO_n":    len(select_samples("WithMicroglia","LEO")),
+            "LEO_n": len(select_samples("WithMicroglia","LEO")),
             "Ground_n": len(select_samples("WithMicroglia","Ground"))
         }
     }
@@ -442,23 +410,19 @@ metadata = {
 with open("results/analysis_metadata.json","w") as f:
     json.dump(metadata, f, indent=2)
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 8: FIGURES
-# ══════════════════════════════════════════════════════════════════════════════
-
 CATEGORY_COLORS = {
-    "Myelination":      "#2166AC",
-    "FastSignalling":   "#4DAC26",
-    "SocialCircuit":    "#D01C8B",
+    "Myelination": "#2166AC",
+    "FastSignalling": "#4DAC26",
+    "SocialCircuit": "#D01C8B",
     "LayerVProjection": "#F4A582",
     "MetabolicSupport": "#878787",
 }
 
 GROUPS_TO_PLOT = ["NoMicroglia", "WithMicroglia", "Combined"]
-GROUP_LABELS   = {
-    "NoMicroglia":   "Without Microglia",
+GROUP_LABELS = {
+    "NoMicroglia": "Without Microglia",
     "WithMicroglia": "With Microglia",
-    "Combined":      "Combined",
+    "Combined": "Combined",
 }
 
 def make_bar_figure(value_key, ylabel, title, filename, reference_lines=None):
@@ -466,9 +430,9 @@ def make_bar_figure(value_key, ylabel, title, filename, reference_lines=None):
     for ax, grp in zip(axes, GROUPS_TO_PLOT):
         df = panel_results[grp]
         categories = df["Category"].tolist()
-        values     = df[value_key].fillna(0).tolist()
-        perm_ps    = df["perm_p"].tolist()
-        colors     = [CATEGORY_COLORS[c] for c in categories]
+        values = df[value_key].fillna(0).tolist()
+        perm_ps = df["perm_p"].tolist()
+        colors = [CATEGORY_COLORS[c] for c in categories]
 
         bars = ax.bar(range(len(categories)), values,
                       color=colors, edgecolor="black", linewidth=0.9, alpha=0.88)
@@ -511,14 +475,14 @@ def make_bar_figure(value_key, ylabel, title, filename, reference_lines=None):
     plt.tight_layout()
     plt.savefig(filename, dpi=200, bbox_inches="tight")
     plt.close()
-    print(f"  Saved: {filename}")
+    print(f" Saved: {filename}")
 
 print("\nGenerating figures...")
 
 make_bar_figure(
     value_key="SD_above_null",
     ylabel="SDs above genome-wide null\n(permutation test, N=10,000)",
-    title=("VEN Gene Panel Specificity — GSE259421 Human Cortical Organoids (ISS vs Ground)\n"
+    title=("VEN Gene Panel Specificity GSE259421 Human Cortical Organoids (ISS vs Ground)\n"
            "Keskin (2026) | VEN Fatigue Hypothesis\n"
            "Dotted lines: ±1.96 SD (p≈0.05 equivalent)"),
     filename="results/Fig1_permutation_specificity.png",
@@ -534,7 +498,6 @@ make_bar_figure(
     filename="results/Fig2_log2FC_raw.png",
 )
 
-# ── Individual marker heatmap ─────────────────────────────────────────────────
 def make_marker_heatmap():
     highlight = ["MBP","MAG","CNP","MOBP","SNAP25","NEFH","NEFL","BCL11B","FEZF2","NOS1"]
     plot_genes = [g for g in highlight if g in marker_df["Gene"].values]
@@ -577,23 +540,16 @@ def make_marker_heatmap():
 
 make_marker_heatmap()
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 9: FINAL SUMMARY
-# ══════════════════════════════════════════════════════════════════════════════
 
-print(f"\n{'='*60}")
 print("ALL OUTPUT FILES")
-print(f"{'='*60}")
 for f in sorted(os.listdir("results")):
     size = os.path.getsize(f"results/{f}")
     print(f"  results/{f}  ({size:,} bytes)")
 
-print(f"\n{'='*60}")
 print("ANALYSIS COMPLETE")
-print(f"{'='*60}")
-print(f"Dataset    : GSE259421 (Marotta et al. 2024, PMID 39441987)")
-print(f"Organism   : Homo sapiens (iPSC-derived cortical organoids)")
+print(f"Dataset : GSE259421 (Marotta et al. 2024, PMID 39441987)")
+print(f"Organism : Homo sapiens (iPSC-derived cortical organoids)")
 print(f"Comparison : ISS (38 days LEO) vs Ground control")
-print(f"Gene map   : MyGene.info — saved to results/ensembl_to_symbol.csv")
-print(f"Panel      : {len(ALL_PANEL_GENES)} genes across 5 VEN categories (pre-defined)")
+print(f"Gene map : MyGene.info — saved to results/ensembl_to_symbol.csv")
+print(f"Panel : {len(ALL_PANEL_GENES)} genes across 5 VEN categories (pre-defined)")
 print(f"Permutation: N={N_PERM:,}, seed={RNG_SEED}")
