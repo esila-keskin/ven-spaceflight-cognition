@@ -1,6 +1,5 @@
 """
 make_paper_figures.py
-=====================
 Generates all four publication-ready figures for:
   "The Social Cognition Paradox in Long-Duration Spaceflight:
    A VEN Fatigue Hypothesis for Duration-Dependent Emotion
@@ -8,14 +7,14 @@ Generates all four publication-ready figures for:
   Keskin 2026
 
 OUTPUT
-------
-  figures/fig1_ert_paradox.png/.pdf      -- Figure 1: ERT temporal profiles
+ 
+  figures/fig1_ert_paradox.png/.pdf -- Figure 1: ERT temporal profiles
   figures/fig2_domain_specificity.png/.pdf -- Figure 2: Domain specificity
   figures/fig3_molecular_dissociation.png/.pdf -- Figure 3: ISS vs OSD-202
   figures/fig4_organoid_permutation.png/.pdf   -- Figure 4: Organoid panel
 
 REQUIRES
---------
+ 
   data/raw/twins_cognitive_heatmap.csv
   data/raw/dev2024_raw_scores.csv
   results/gse239336_ven_signature.json
@@ -27,8 +26,7 @@ REQUIRES
 Run step1_create_cognitive_csvs.py and step2_run_analysis.py first.
 
 Usage
------
-  python make_paper_figures.py
+   python make_paper_figures.py
 """
 
 import os, json
@@ -44,10 +42,9 @@ warnings.filterwarnings("ignore")
 
 os.makedirs("figures", exist_ok=True)
 
-# ── shared style ──────────────────────────────────────────────────────────────
 plt.rcParams.update({
-    "font.family":     "sans-serif",
-    "font.size":       10,
+    "font.family": "sans-serif",
+    "font.size": 10,
     "axes.spines.top": False,
     "axes.spines.right": False,
     "axes.linewidth":  0.8,
@@ -57,25 +54,25 @@ plt.rcParams.update({
 })
 
 CAT_COLORS = {
-    "Myelination":     "#4E9AF1",
+    "Myelination": "#4E9AF1",
     "FastSignalling":  "#52C869",
-    "SocialCircuit":   "#E05252",
+    "SocialCircuit": "#E05252",
     "LayerVProjection": "#F5A623",
     "MetabolicSupport": "#9B59B6",
 }
 CAT_LABELS = {
-    "Myelination":     "Myelination",
+    "Myelination": "Myelination",
     "FastSignalling":  "Fast\nSignalling",
-    "SocialCircuit":   "Social\nCircuit",
+    "SocialCircuit": "Social\nCircuit",
     "LayerVProjection": "Layer V\nProjection",
     "MetabolicSupport": "Metabolic\nSupport",
 }
 
 def sig_star(p):
     if p < 0.001: return "***"
-    if p < 0.01:  return "**"
-    if p < 0.05:  return "*"
-    if p < 0.10:  return "†"
+    if p < 0.01: return "**"
+    if p < 0.05: return "*"
+    if p < 0.10: return "†"
     return ""
 
 def add_sig(ax, x, y, label, color="black", fontsize=11, dy=0.08):
@@ -91,14 +88,10 @@ def save(fig, stem):
     print(f"  Saved figures/{stem}.pdf/.png")
     plt.close(fig)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# FIGURE 1  The ERT Paradox: 340-day decline vs 6-month stability
-# ══════════════════════════════════════════════════════════════════════════════
 def fig1_ert_paradox():
     print("Generating Figure 1: ERT Paradox...")
     twins = pd.read_csv("data/raw/twins_cognitive_heatmap.csv")
-    dev   = pd.read_csv("data/raw/dev2024_raw_scores.csv")
+    dev = pd.read_csv("data/raw/dev2024_raw_scores.csv")
 
     ert_tw = twins[(twins["task"] == "ERT") & (twins["metric"] == "speed")]
     phases_tw  = ["pre_flight", "inf_early_1_6", "inf_late_7_12", "post_flight"]
@@ -107,7 +100,7 @@ def fig1_ert_paradox():
 
     ert_dev = dev[(dev["task"] == "ERT") & (dev["metric"] == "speed")].copy()
     pre_mean = float(ert_dev[ert_dev["phase"] == "pre_flight"]["mean"].values[0])
-    pre_sd   = float(ert_dev[ert_dev["phase"] == "pre_flight"]["sd"].values[0])
+    pre_sd = float(ert_dev[ert_dev["phase"] == "pre_flight"]["sd"].values[0])
     ert_dev["z"] = -(ert_dev["mean"] - pre_mean) / pre_sd
     phases_dev = ["pre_flight", "early_flight", "late_flight", "early_post_flight", "late_post_flight"]
     labels_dev = ["Pre-\nFlight", "Early\nFlight", "Late\nFlight", "Early\nPost", "Late\nPost"]
@@ -161,9 +154,7 @@ def fig1_ert_paradox():
     save(fig, "fig1_ert_paradox")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# FIGURE 2  Domain specificity: ERT is the most extreme domain in the 340-day mission
-# ══════════════════════════════════════════════════════════════════════════════
+
 def fig2_domain_specificity():
     print("Generating Figure 2: Domain Specificity...")
     twins = pd.read_csv("data/raw/twins_cognitive_heatmap.csv")
@@ -231,10 +222,8 @@ def fig2_domain_specificity():
     save(fig, "fig2_domain_specificity")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# FIGURE 3  Molecular dissociation: ISS frontal cortex vs ground-based analogue
-# ══════════════════════════════════════════════════════════════════════════════
-def fig3_molecular_dissociation():
+ # FIGURE 3  Molecular dissociation: ISS frontal cortex vs ground-based analogue
+  def fig3_molecular_dissociation():
     print("Generating Figure 3: Molecular Dissociation...")
     with open("results/gse239336_ven_signature.json") as f:
         gse = json.load(f)
@@ -244,13 +233,13 @@ def fig3_molecular_dissociation():
     cat_keys  = ["myelination", "fast_signalling", "social_circuit", "layer5_proj", "metabolic"]
     cat_names = ["Myelination", "Fast\nSignalling", "Social\nCircuit", "Layer V\nProjection", "Metabolic\nSupport"]
 
-    iss_fc  = [gse[c]["mean_logfc"]      for c in cat_keys]
-    gnd_fc  = [osd[c]["mean_logfc"]      if c in osd else np.nan for c in cat_keys]
-    iss_p   = [gse[c]["p_value"]         for c in cat_keys]
-    iss_pp  = [gse[c]["p_permutation"]   for c in cat_keys]
-    gnd_p   = [osd[c].get("p_value", np.nan) for c in cat_keys]
+    iss_fc  = [gse[c]["mean_logfc"] for c in cat_keys]
+    gnd_fc  = [osd[c]["mean_logfc"] if c in osd else np.nan for c in cat_keys]
+    iss_p = [gse[c]["p_value"] for c in cat_keys]
+    iss_pp  = [gse[c]["p_permutation"] for c in cat_keys]
+    gnd_p = [osd[c].get("p_value", np.nan) for c in cat_keys]
     gnd_pp  = [osd[c].get("p_permutation", np.nan) if c in osd else np.nan for c in cat_keys]
-    iss_sd  = [gse[c]["sd_above_null"]   for c in cat_keys]
+    iss_sd = [gse[c]["sd_above_null"] for c in cat_keys]
     gnd_sd  = [osd[c].get("sd_above_null", np.nan) if c in osd else np.nan for c in cat_keys]
 
     x = np.arange(len(cat_keys))
@@ -289,8 +278,8 @@ def fig3_molecular_dissociation():
         ns = [v[0] for v in valid]
         iss_s = [v[1] for v in valid]
         gnd_s = [v[2] for v in valid]
-        ipp   = [v[3] for v in valid]
-        gpp   = [v[4] for v in valid]
+        ipp = [v[3] for v in valid]
+        gpp = [v[4] for v in valid]
         xv = np.arange(len(ns))
         ax.bar(xv - w/2, iss_s, w, color="#3A7FC1", alpha=0.88, edgecolor="black", lw=0.7,
                label="ISS")
@@ -323,9 +312,7 @@ def fig3_molecular_dissociation():
     save(fig, "fig3_molecular_dissociation")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # FIGURE 4  Organoid permutation specificity: VEN panel in GSE259421
-# ══════════════════════════════════════════════════════════════════════════════
 def fig4_organoid_permutation():
     print("Generating Figure 4: Organoid Permutation Specificity...")
 
@@ -349,9 +336,9 @@ def fig4_organoid_permutation():
     # Use canonical category order
     cat_order = ["Myelination", "FastSignalling", "SocialCircuit",
                  "LayerVProjection", "MetabolicSupport"]
-    cat_nice  = ["Myelination", "Fast\nSignalling", "Social\nCircuit",
+    cat_nice = ["Myelination", "Fast\nSignalling", "Social\nCircuit",
                  "Layer V\nProjection", "Metabolic\nSupport"]
-    cat_col   = [CAT_COLORS[c] for c in cat_order]
+    cat_col = [CAT_COLORS[c] for c in cat_order]
 
     group_names = list(dfs.keys())
     n_groups = len(group_names)
@@ -364,7 +351,7 @@ def fig4_organoid_permutation():
     fig, axes = plt.subplots(1, 2, figsize=(13, 5.5))
     fig.subplots_adjust(wspace=0.28)
 
-    # ---- Left panel: SD above null for all three groups ----
+    #   Left panel: SD above null for all three groups  
     ax = axes[0]
     for gi, (gname, offset, hatch, alpha) in enumerate(zip(group_names, offsets, group_hatches, group_alphas)):
         df = dfs[gname]
@@ -405,7 +392,6 @@ def fig4_organoid_permutation():
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, alpha=0.3, lw=0.6)
 
-    # ---- Right panel: Mean log2FC combined only with individual gene dots ----
     ax = axes[1]
     df_c  = dfs[group_names[0]].set_index("Category")
     fc_vals = []
@@ -457,9 +443,6 @@ def fig4_organoid_permutation():
     save(fig, "fig4_organoid_permutation")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# MAIN
-# ══════════════════════════════════════════════════════════════════════════════
 if __name__ == "__main__":
     print("=" * 65)
     print("  Generating publication figures for VEN Fatigue Hypothesis")
@@ -490,5 +473,5 @@ if __name__ == "__main__":
 
     print("\nAll figures generated in figures/")
     print("Files: fig1_ert_paradox, fig2_domain_specificity,")
-    print("       fig3_molecular_dissociation, fig4_organoid_permutation")
+    print(" fig3_molecular_dissociation, fig4_organoid_permutation")
     print("Each saved as .pdf (vector) and .png (raster, 150 dpi)")
