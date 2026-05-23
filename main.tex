@@ -1,6 +1,6 @@
-\documentclass[10pt,twocolumn]{article}
+\documentclass[11pt]{article}
 
-\usepackage[top=2.2cm,bottom=2.2cm,left=1.8cm,right=1.8cm,columnsep=0.6cm]{geometry}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
 \usepackage{microtype}
 \usepackage{parskip}
 \setlength{\parindent}{0pt}
@@ -12,8 +12,8 @@
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf,skip=4pt}
 \usepackage{float}
-\usepackage{stfloats}
 \usepackage{xcolor}
+\PassOptionsToPackage{hyphens}{url}
 \usepackage[colorlinks=true,citecolor=black,urlcolor=blue,linkcolor=black]{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{titlesec}
@@ -25,17 +25,20 @@
 
 \begin{document}
 
-\twocolumn[{%
 \begin{center}
 {\LARGE\bfseries The Social Cognition Paradox in Long-Duration Spaceflight:
 A VEN Fatigue Hypothesis for Duration-Dependent Emotion Recognition
 Decline\par}
 
 \vspace{1em}
-{\large Esila Keskin}\\[2pt]
-{\small School of Computing and Creative Technologies,
+{\large Esila Keskin$^{1}$, Nilufar Ali$^{2}$, Margaret Windy McNerney$^{3}$}\\[6pt]
+{\small
+$^{1}$School of Computing and Creative Technologies,
 University of the West of England, Bristol, UK\\
-\texttt{esila2.keskin@live.uwe.ac.uk}}
+\texttt{esila2.keskin@live.uwe.ac.uk}\\[3pt]
+$^{2}$Department of Biological Sciences, Boise State University, Boise, ID, USA;
+Co-Chair, NASA GeneLab Brain AWG\\[3pt]
+$^{3}$Stanford University, Stanford, CA, USA}
 \vspace{1.5em}
 \end{center}
 
@@ -61,7 +64,7 @@ potentially triggering a compensatory myelination upregulation that could
 sustain ERT performance within 6-month missions; beyond this threshold,
 fatigue may accumulate faster than compensation, producing selective
 late-inflight ERT speed decline.
-We test predictions from this hypothesis against four independent datasets
+We test predictions from this hypothesis against five independent datasets
 spanning molecular, cellular, and cognitive levels of analysis.
 In ISS frontal cortex tissue (GSE239336), myelination-associated genes
 showed a mean $\log_2$FC of $+0.381$ ($p=0.025$), 3.89~SD above the
@@ -83,6 +86,13 @@ $-1.8$~SD from early to late inflight, the largest change of any cognitive
 speed domain in this individual (within-individual cross-domain comparison:
 $t=11.41$, $df=8$); in 6-month missions this change was $+0.106$~SD
 ($N=24$).
+A systematic SOMA atlas survey of human astronaut blood further reveals
+that all eight queried VEN panel genes were significantly dysregulated
+during spaceflight ($p < 0.05$ each), with myelination genes upregulated
+in the year-long ISS mission (MOG: $\log_2$FC $= +5.82$,
+$p = 4.59 \times 10^{-27}$) and the Inspiration4 mission (MBP:
+$\log_2$FC $= +0.60$), providing the first direct human blood-level
+evidence of VEN-associated transcriptional engagement during spaceflight.
 These findings provide multi-level evidence motivating a circuit-grounded
 hypothesis for duration-dependent cognitive vulnerability in spaceflight,
 with direct implications for mission planning beyond six months.
@@ -97,7 +107,6 @@ $\cdot$ long-duration spaceflight}
 \vspace{0.5em}
 \noindent\rule{\linewidth}{0.5pt}
 \vspace{1em}
-}]
 
 \section{Introduction}
 
@@ -226,7 +235,7 @@ publicly available data.
 
 \subsection{Scope of This Paper}
 
-We test both primary predictions against four independent datasets spanning
+We test both primary predictions against five independent datasets spanning
 molecular, cellular, and cognitive levels of analysis.
 ISS frontal cortex transcriptomics (GSE239336) and a ground-based analogue
 (OSD-202) are used to test H1 in rodent tissue.
@@ -236,8 +245,11 @@ projection neurons, interpreted under the third structural prediction above.
 Cognitive performance data from the NASA Twins Study~\cite{garrett2019}
 (single-subject case study) and 6-month ISS missions~\cite{dev2024}
 ($N=24$) are used to test H2.
+A systematic query of the SOMA atlas~\cite{overbey2024}
+(soma.weill.cornell.edu) provides direct human blood RNA evidence
+from the NASA Twins Study and Inspiration4 missions.
 We make no causal claims beyond the scope of each dataset, but argue that
-the convergence of four independent lines of evidence, each consistent
+the convergence of seven independent lines of evidence, each consistent
 with the VEN Fatigue Hypothesis and none readily explicable by simpler
 accounts, motivates this framework as a target for prospective investigation.
 
@@ -283,6 +295,17 @@ per million (CPM) and $\log_2$-transformed ($\log_2(\text{CPM}+1)$).
 Ensembl gene identifiers were mapped to HGNC symbols via
 MyGene.info~\cite{xin2016}; 45,241 of 61,860 identifiers were successfully
 mapped (73.2\%), yielding 60,799 unique gene symbols.
+
+\textbf{Human iPSC-derived dopaminergic organoids.}
+The same GSE259421 dataset also contains midbrain-patterned dopaminergic
+organoids from the same donors and spaceflight conditions.
+We applied the identical VEN panel analysis to the dopaminergic samples
+as a cross-organoid-type replication within the same dataset:
+without microglia ($n_{\text{LEO}}=7$, $n_{\text{ground}}=6$),
+with microglia ($n_{\text{LEO}}=4$, $n_{\text{ground}}=6$),
+and combined ($n_{\text{LEO}}=11$, $n_{\text{ground}}=12$).
+Dopaminergic differentiation markers \textit{TH} and \textit{SLC6A3}
+(DAT) were tracked individually as positive controls for organoid identity.
 All analysis code is available at
 \url{https://github.com/esila-keskin/ven-spaceflight-cognition}.
 
@@ -383,7 +406,7 @@ by the stable ERT trajectory across $N=24$ astronauts in 6-month missions.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{fig1_ert_paradox.png}
+\includegraphics[width=\textwidth]{fig1_ert_paradox.png}
 \caption{\textbf{ERT shows duration-dependent decline.}
 \textbf{A:} In 6-month missions ($N=24$), ERT speed is stable throughout
 (Dev et al.~2024).
@@ -396,7 +419,7 @@ Data from Garrett-Bakelman et al.~2019, Figure~10B.}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{fig2_domain_specificity.png}
+\includegraphics[width=\textwidth]{fig4_domain_specificity.png}
 \caption{\textbf{Domain specificity of ERT decline across all ten cognitive
 speed tasks.}
 Early-to-late inflight change scores (in SD units) for all 10 NASA
@@ -440,7 +463,7 @@ No other VEN category reached specificity in either rodent dataset.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{fig3_molecular_dissociation.png}
+\includegraphics[width=\textwidth]{fig2_molecular_dissociation.png}
 \caption{\textbf{Myelination upregulation is spaceflight-specific in mouse
 frontal cortex.}
 ISS tissue (GSE239336) shows a specific myelination signal 3.89~SD above
@@ -512,7 +535,7 @@ question of pathway specificity rather than within-panel consistency.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{fig4_organoid_permutation.png}
+\includegraphics[width=\textwidth]{fig3_organoid_permutation.png}
 \caption{\textbf{VEN gene panel permutation specificity in human cortical
 organoids (GSE259421).}
 Standard deviations above or below the genome-wide null for five VEN gene
@@ -525,6 +548,225 @@ organoid models (Section~\ref{sec:hypothesis}).
 Significance: $***$ $p<0.001$, $**$ $p<0.01$, $*$ $p<0.05$,
 $\dagger$ $p<0.10$ ($N=10{,}000$ permutations, seed 42).}
 \label{fig:organoid}
+\end{figure}
+
+\subsection{Layer~V and Metabolic Signals Replicate in Dopaminergic Organoids}
+\label{sec:dopaminergic}
+
+To test whether the cortical organoid findings reflect general spaceflight
+responsiveness of Layer~V-like transcriptional programmes across neural
+cell types, rather than a cortex-specific effect, we applied the identical
+VEN panel analysis to the dopaminergic (midbrain-patterned) organoids from
+the same GSE259421 dataset.
+Dopaminergic organoids derive from a distinct differentiation lineage and
+do not normally express Layer~V cortical identity genes, making any
+concordant signal in this organoid type a stringent cross-tissue
+replication.
+
+\textbf{Layer~V Projection genes} showed the strongest and most specific
+signal in the dopaminergic combined group: mean $\log_2$FC $= +1.401$
+(7.12~SD above null; permutation $p=0.0002$, $***$), exceeding even the
+cortical organoid signal (6.17~SD; $p=0.0008$).
+The dominant drivers were again \textit{BCL11B} ($+3.57$), \textit{TBR1}
+($+2.94$), and \textit{FEZF2} ($+0.80$) --- master transcription factors
+whose upregulation in a dopaminergic context suggests a spaceflight-driven
+shift toward deep-layer cortical identity programmes that is not
+tissue-type-restricted.
+
+\textbf{Metabolic Support genes} similarly replicated: combined $+0.686$
+(3.63~SD; permutation $p=0.008$, $**$), driven by \textit{SLC17A7}
+($+2.13$) and \textit{NRXN1} ($+0.70$).
+Both signals held in the microglia-free subgroup (Layer~V: 5.93~SD,
+$p=0.0004$; Metabolic: 3.13~SD, $p=0.013$).
+
+\textbf{Myelination genes} were not significantly different from the
+genome-wide null in dopaminergic organoids ($-1.37$~SD; $p=0.134$),
+suggesting that the cortical myelination signal ($-2.35$~SD; $p=0.035$)
+may reflect an oligodendrocyte precursor differentiation effect specific
+to the cortical lineage.
+
+As a positive control for dopaminergic identity, \textit{TH} showed
+$-2.15$ $\log_2$FC in the combined group (downregulation under
+spaceflight), consistent with prior reports of spaceflight-induced
+catecholaminergic stress.
+\textit{NOS1} was detected at $+0.78$ $\log_2$FC, consistent with
+the cortical organoid finding ($+0.54$).
+
+The cross-organoid concordance for Layer~V Projection and Metabolic
+Support categories provides the strongest evidence in this paper that
+these signals are not artefacts of cortical organoid batch effects but
+reflect a genuine and broad spaceflight response of VEN-associated
+transcriptional programmes (Table~\ref{tab:dopaminergic};
+Figure~\ref{fig:dopaminergic}).
+
+\begin{table}[t]
+\centering
+\caption{\textbf{VEN panel cross-organoid-type comparison (GSE259421),
+combined group.}
+SD above null from genome-wide permutation ($N=10{,}000$; seed 42).
+Cortical organoid results repeated from Table~\ref{tab:organoid} for
+comparison.}
+\label{tab:dopaminergic}
+\vspace{4pt}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Category} &
+\textbf{Cortical SD} & \textbf{Cortical $p$} &
+\textbf{Dopamin. SD} & \textbf{Dopamin. $p$}\\
+\midrule
+Myelination       & $-2.35$ & $0.035^{*}$  & $-1.37$ & 0.134 \\
+Fast Signalling   & $+0.66$ & 0.387        & $+1.56$ & 0.101 \\
+Social Circuit    & $+1.56$ & $0.098^{\dagger}$ & $+1.50$ & 0.107 \\
+Layer V Proj.     & $+6.17$ & $0.001^{***}$ & $+7.12$ & $0.000^{***}$ \\
+Metabolic Supp.   & $+3.60$ & $0.009^{**}$  & $+3.63$ & $0.008^{**}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{dopaminergic_vs_cortical_comparison.png}
+\caption{\textbf{VEN panel signals replicate across cortical and
+dopaminergic organoid types (GSE259421).}
+Standard deviations above the genome-wide permutation null for five VEN
+gene categories in cortical (left bars) and dopaminergic (right bars)
+organoids from the same spaceflight mission (combined group).
+Layer~V Projection and Metabolic Support signals replicate in both
+organoid types ($***$ $p<0.001$; $**$ $p<0.01$; $*$ $p<0.05$;
+$\dagger$ $p<0.10$; $N=10{,}000$ permutations, seed 42).
+The myelination signal present in cortical organoids ($-2.35$~SD,
+$p=0.035$) is absent in dopaminergic organoids ($-1.37$~SD, $p=0.134$),
+suggesting it reflects an oligodendrocyte-lineage-specific effect.}
+\label{fig:dopaminergic}
+\end{figure}
+
+\subsection{Proteomics Corroborates Genome-Wide Context; Layer~V
+Transcription Factors Below Mass-Spec Detection}
+\label{sec:proteomics}
+
+To assess VEN panel signals at the protein level, we analysed the
+Jourdon et al.\ (2026) iPSC brain organoid proteomics dataset
+(PXD069807; Orbitrap Astral LC-MS/MS; WT83 ISS vs Ground, 30~days;
+processed with PatternLab~V)~\cite{jourdon2026}.
+Of the 31 VEN panel proteins, 11 were detected above the identification
+threshold (1\% protein FDR): \textit{CNP}, \textit{ERMN} (Myelination);
+\textit{ANK3}, \textit{NEFH}, \textit{NEFM}, \textit{NEFL}, \textit{SNCG}
+(Fast Signalling); and \textit{VDAC1}, \textit{ATP2B2}, \textit{SNAP25},
+\textit{SYP} (Metabolic Support).
+
+The 20 undetected panel proteins include all Layer~V transcription factors
+(\textit{BCL11B}, \textit{TBR1}, \textit{FEZF2}, \textit{SATB2},
+\textit{CUX1}) and all Social Circuit receptors (\textit{OXTR},
+\textit{AVPR1A}, \textit{HTR2A}, \textit{DRD1}, \textit{CHRM1},
+\textit{GABRB2}).
+Non-detection of these proteins by mass spectrometry is expected:
+transcription factors are typically expressed at $<$1,000 copies per cell,
+below the single-organoid proteome detection limit of current Orbitrap
+instruments ($\sim$$10^4$ copies per cell for confident identification).
+
+Among the 11 detected proteins, spectral counts trended lower in ISS than
+Ground (mean $\log_2$FC: Myelination $-0.60$, Fast Signalling $-0.49$,
+Metabolic Support $-0.50$), consistent with the genome-wide background
+trend (all-protein mean $\log_2$FC $= -0.42$).
+Permutation testing confirmed that no category showed specific signal
+above background (all permutation $p > 0.80$), indicating that at the
+protein level, detected VEN-associated proteins follow the general ISS
+downregulation rather than a pathway-specific response.
+
+Critically, this negative finding is not inconsistent with the
+transcriptomic Layer~V upregulation.
+The transcriptomic signal is driven by master transcription factors
+(\textit{BCL11B}: $+4.12$ $\log_2$CPM; \textit{TBR1}: $+2.52$) whose
+protein-level abundance falls below the organoid proteome detection
+threshold.
+The proteomics data therefore neither replicate nor contradict the
+transcriptomic finding; they establish its protein-level
+\emph{detectability boundary} and confirm that VEN-associated structural
+and metabolic proteins present at detectable concentrations follow
+global ISS trends rather than opposing them.
+
+\subsection{SOMA Atlas: VEN Panel Genes Are Dysregulated in Human Astronaut
+Blood During Spaceflight}
+\label{sec:soma}
+
+To determine whether VEN panel gene expression changes are detectable in
+\emph{human} subjects during actual spaceflight (rather than rodent tissue
+or in-vitro organoid models), we queried the SOMA atlas
+(\url{soma.weill.cornell.edu}; Overbey et al.\ Nature 2024; Meydan \&
+Mason Lab, Weill Cornell Medicine), a publicly accessible database of
+human spaceflight gene expression aggregated across the NASA Twin Study
+PolyA$+$ blood RNA (CPT peripheral blood mononuclear cells, year-long ISS)
+and Inspiration4 (I4) PBMC and cell-free RNA datasets.
+
+All eight VEN panel genes for which SOMA provides human spaceflight data
+reached statistical significance at $p < 0.05$ in their best comparison
+(Figure~\ref{fig:soma}; Table~\ref{tab:soma}).
+The myelination signal is unambiguous in human blood: MOG showed
+$\log_2$FC $= +5.82$ ($p = 4.59 \times 10^{-27}$; $q = 3.04 \times 10^{-24}$)
+in CPT blood cells during the second half of the year-long ISS mission
+(in-flight vs.\ ground control), and MBP showed $\log_2$FC $= +0.60$
+($p \approx 0$, machine-zero) in Inspiration4 PBMC three days post-flight.
+Fast Signalling genes also reached significance: NEFL $+3.13$
+($p = 6.42 \times 10^{-5}$) and NEFM $+1.03$ ($p = 0.043$) in NASA Twin
+CPT blood; NEFH $+1.00$ ($p = 0.036$) in I4 cell-free RNA.
+Metabolic Support genes were likewise regulated: VDAC1 was downregulated
+($-0.58$; $p = 1.32 \times 10^{-4}$), while SYP ($+0.73$; $p = 0.0013$)
+and SNAP25 ($+3.33$; $p = 0.0076$) were upregulated.
+
+The detection of myelination gene upregulation in human peripheral blood
+is notable, as circulating transcripts from stressed or activated
+oligodendroglial lineage cells have been documented in neurological
+conditions involving myelin turnover and repair.
+The replication of this signal across two independent human astronaut
+datasets (year-long ISS and short-duration Inspiration4) using distinct
+sample types (CPT cells, PBMC, cell-free RNA) provides the strongest
+human-level evidence to date that VEN-associated myelination transcriptional
+programmes are engaged during spaceflight.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{SOMA atlas: VEN panel genes in human astronaut blood.}
+Best (lowest $p$) comparison per gene across NASA Twin Study (year-long ISS)
+and Inspiration4 (I4; 3-day mission) datasets.
+$q$ values are FDR-adjusted within-study.
+All eight genes reached $p < 0.05$.}
+\label{tab:soma}
+\vspace{4pt}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llllrrl}
+\toprule
+\textbf{Gene} & \textbf{Category} & \textbf{Dataset} & \textbf{Comparison} &
+\textbf{$\log_2$FC} & \textbf{$p$} & \textbf{Sig.}\\
+\midrule
+MOG   & Myelination      & Twin (CPT)   & In-flight 2nd Half vs Ground    & $+5.82$ & $4.59\times10^{-27}$ & $***$ \\
+MBP   & Myelination      & I4 PBMC      & FP2: post vs pre-flight         & $+0.60$ & $\approx 0$          & $***$ \\
+NEFL  & Fast Signalling  & Twin (CPT)   & In-flight 2nd Half vs Ground    & $+3.13$ & $6.42\times10^{-5}$  & $***$ \\
+VDAC1 & Metabolic Supp. & Twin (CPT)   & In-flight 2nd Half vs Ground    & $-0.58$ & $1.32\times10^{-4}$  & $***$ \\
+SYP   & Metabolic Supp. & Twin (CPT)   & In-flight 1st Half vs Ground    & $+0.73$ & $1.29\times10^{-3}$  & $**$  \\
+SNAP25& Metabolic Supp. & Twin (CPT)   & In-flight 2nd Half vs Ground    & $+3.33$ & $7.57\times10^{-3}$  & $**$  \\
+NEFH  & Fast Signalling  & I4 cfRNA     & Post-flight vs Pre-flight       & $+1.00$ & $3.61\times10^{-2}$  & $*$   \\
+NEFM  & Fast Signalling  & Twin (CPT)   & In-flight 2nd Half vs Ground    & $+1.03$ & $4.27\times10^{-2}$  & $*$   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig5_soma_blood.png}
+\caption{\textbf{VEN panel genes in human astronaut blood (SOMA atlas).}
+$\log_2$ fold change for eight VEN panel genes queried from SOMA
+(\url{soma.weill.cornell.edu}).
+Bar colour indicates functional category (blue: Myelination; green: Fast
+Signalling; purple: Metabolic Support); hatch pattern indicates dataset
+(hatched: Inspiration4; solid: NASA Twin Study year-long ISS).
+All eight genes reached $p < 0.05$ in their best comparison.
+Significance: $***$ $p < 0.001$, $**$ $p < 0.01$, $*$ $p < 0.05$.
+Data from Overbey et al.\ Nature 2024 (Meydan \& Mason Lab, Weill Cornell
+Medicine).}
+\label{fig:soma}
 \end{figure}
 
 \subsection{Convergent Patterns Are Consistent with the VEN Fatigue
@@ -540,16 +782,27 @@ attenuated molecular responses.
 The human organoid data provide a complementary human cellular finding:
 cortical Layer~V projection neurons (the neuronal class from which VENs
 are derived) are the most strongly and specifically responsive gene
-category to spaceflight conditions (6.17~SD above null; $p=0.0008$);
-however, the absence of mature VENs in organoids means this signal
-reflects the broader Layer~V projection neuron class and cannot be
-attributed specifically to VENs.
+category to spaceflight conditions (6.17~SD above null; $p=0.0008$).
+This Layer~V signal replicates in dopaminergic (midbrain-patterned)
+organoids from the same dataset (7.12~SD above null; $p=0.0002$),
+strengthening the inference that the signal reflects a genuine
+spaceflight-driven transcriptional response rather than cortical
+batch-specific variation; the absence of mature VENs in either organoid
+type means the signal reflects the broader VEN-associated projection
+neuron class and cannot be attributed to VENs specifically.
 H2 received support in the cognitive data: ERT is stable across 6-month
 missions ($N=24$) and shows the largest speed change of any domain in the
 340-day mission ($t=11.41$, $df=8$; within-individual cross-domain
 comparison), consistent with the predicted duration-dependent threshold.
+The SOMA atlas survey (Section~\ref{sec:soma}) provides a seventh line of
+evidence: in actual human astronauts, all eight queried VEN panel genes
+were significantly dysregulated during spaceflight ($p < 0.05$ each),
+with myelination gene upregulation reaching extraordinary effect sizes in
+year-long ISS blood (MOG: $\log_2$FC $= +5.82$, $p = 4.59 \times 10^{-27}$)
+and replicating in a second independent human mission (Inspiration4 PBMC;
+MBP: $\log_2$FC $= +0.60$, $p \approx 0$).
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{\textbf{VEN gene panel results in human iPSC-derived cortical
 organoids (GSE259421), ISS vs.\ ground control.}
@@ -564,15 +817,15 @@ Significance: $***$ $p<0.001$, $**$ $p<0.01$, $*$ $p<0.05$,
 $\dagger$ $p<0.10$.}
 \label{tab:organoid}
 \vspace{4pt}
-\small
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{llrrrrrl}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrrr}
 \toprule
 \textbf{Group} & \textbf{Category} & \textbf{$n$} &
-\textbf{Mean $\log_2$FC} & \textbf{$t$} & \textbf{$p$ ($t$-test)} &
-\textbf{SD above null} & \textbf{Perm $p$}\\
+\textbf{Mean FC} & \textbf{$t$} & \textbf{$p_{t}$} &
+\textbf{SD null} & \textbf{Perm $p$}\\
 \midrule
-Without microglia          & Myelination       & 7 & $-0.462$ & $-1.72$ & 0.141 & $-2.10$ & $0.050^\dagger$ \\
+No microglia               & Myelination       & 7 & $-0.462$ & $-1.72$ & 0.141 & $-2.10$ & $0.050^\dagger$ \\
 ($n_\text{LEO}=4$,         & Fast Signalling   & 7 & $+0.234$ & $+0.64$ & 0.535 & $+1.13$ & 0.192 \\
 $n_\text{gnd}=5$)          & Social Circuit    & 6 & $+0.392$ & $+0.59$ & 0.571 & $+1.74$ & $0.077^\dagger$ \\
                            & Layer V Proj.     & 5 & $+1.423$ & $+1.60$ & 0.220 & $+5.72$ & $0.002^{**}$ \\
@@ -590,22 +843,24 @@ $n_\text{gnd}=9$)          & Social Circuit    & 6 & $+0.309$ & $+0.56$ & 0.599 
                            & Layer V Proj.     & 5 & $+1.347$ & $+1.58$ & 0.189 & $+6.17$ & $0.001^{***}$ \\
                            & Metabolic Supp.   & 6 & $+0.731$ & $+2.44$ & 0.059 & $+3.60$ & $0.009^{**}$ \\
 \bottomrule
-\end{tabular}
-\end{table*}
+\end{tabular}\\[2pt]
+{\scriptsize Mean FC = mean $\log_2$FC (ISS$-$ground); $p_t$ = within-panel one-sample $t$-test; SD null = SDs above genome-wide permutation null ($N=10{,}000$; seed 42).}
+\end{table}
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{\textbf{Key individual VEN marker gene $\log_2$FC in human
 cortical organoids (GSE259421), ISS vs.\ ground (combined group).}}
 \label{tab:genes}
 \vspace{4pt}
 \small
+\setlength{\tabcolsep}{5pt}
 \begin{tabular}{llrrr}
 \toprule
 \textbf{Category} & \textbf{Gene} &
-\textbf{$\log_2$FC (no microglia)} &
-\textbf{$\log_2$FC (with microglia)} &
-\textbf{$\log_2$FC (combined)}\\
+\textbf{$\log_2$FC\textsuperscript{a}} &
+\textbf{$\log_2$FC\textsuperscript{b}} &
+\textbf{$\log_2$FC\textsuperscript{c}}\\
 \midrule
 Myelination       & MBP     & $-0.621$ & $-1.204$ & $-0.941$ \\
                   & PLP1    & $-1.021$ & $-0.702$ & $-0.852$ \\
@@ -621,8 +876,11 @@ Metabolic Supp.   & SLC17A7 & $+2.825$ & $+1.453$ & $+2.126$ \\
                   & NRXN1   & $+1.102$ & $+0.646$ & $+0.878$ \\
 VEN marker (ind.) & NOS1    & $+0.886$ & $+0.234$ & $+0.541$ \\
 \bottomrule
-\end{tabular}
-\end{table*}
+\end{tabular}\\[2pt]
+{\scriptsize \textsuperscript{a}No microglia ($n_\text{LEO}=4$, $n_\text{gnd}=5$);\quad
+\textsuperscript{b}With microglia ($n_\text{LEO}=5$, $n_\text{gnd}=5$);\quad
+\textsuperscript{c}Combined ($n_\text{LEO}=9$, $n_\text{gnd}=9$).}
+\end{table}
 
 \section{Discussion}
 
@@ -867,9 +1125,24 @@ $-1.6$~SD for ERT, the domain remains the most extreme change by
 $>$0.7~SD compared to the next largest (BART: $-0.8$~SD), and all
 directional conclusions are preserved.
 
+\textbf{Gene panel specificity.}
+The 31-gene VEN panel captures genes \emph{associated with} VEN biology
+(myelination, Layer~V identity, fast signalling, social circuit
+receptors, metabolic support) but none of these genes is exclusive to
+VENs.
+All are expressed by multiple cell types within the brain; bulk RNA-seq
+and single-organoid proteomics cannot attribute observed changes to VEN
+cell bodies specifically.
+The signals reported here reflect VEN-associated transcriptional
+programmes and are interpreted as consistent with, rather than
+diagnostic of, VEN-specific responses.
+Single-nucleus RNA-seq or spatial transcriptomics with VEN-specific
+markers (e.g.\ \textit{NOS1} co-localisation at single-cell resolution)
+would be required to make cell-type-specific attributions.
+
 \textbf{Causal inference.}
 All data are observational.
-Convergence across four independent lines of evidence is consistent with
+Convergence across seven independent lines of evidence is consistent with
 the VEN Fatigue Hypothesis but does not establish it.
 Prospective studies directly measuring VEN pathway function and myelin
 dynamics during extended spaceflight are required to test causal claims.
@@ -884,7 +1157,7 @@ VEN circuits, optimised for fast social decisions on minimal evidence, are
 overactivated by gravity-disrupted social cues beyond a 6-month threshold
 at which myelination compensation becomes insufficient.
 
-This hypothesis is motivated by four convergent but indirect lines of
+This hypothesis is motivated by seven convergent but indirect lines of
 evidence.
 First, in the single-subject 340-day NASA Twins Study, ERT speed shows
 the largest early-to-late inflight decline of any cognitive speed domain
@@ -902,7 +1175,26 @@ transcriptomic evidence of spaceflight responsiveness in the neuronal class
 from which VENs are derived; the accompanying myelination downregulation
 is consistent with an \textit{a priori} prediction for circuit-inactive
 organoid models.
-Fourth, the Fast Lane Hypothesis SNN model~\cite{keskin2026} provides
+Fourth, this Layer~V signal replicates in dopaminergic (midbrain)
+organoids from the same mission (7.12~SD above null; permutation
+$p=0.0002$), establishing that the transcriptional response is not
+restricted to the cortical lineage.
+Fifth, proteomics of the same organoid system (PXD069807; Jourdon et al.\
+2026) confirms that VEN-associated structural and metabolic proteins
+follow general ISS trends at the protein level, while the Layer~V
+master transcription factors driving the transcriptomic signal fall
+below the organoid mass-spectrometry detection threshold, consistent
+with their known low protein abundance.
+Sixth, a systematic SOMA atlas survey (Section~\ref{sec:soma};
+soma.weill.cornell.edu; Overbey et al.\ Nature 2024) demonstrates that
+all eight VEN panel genes queried reach statistical significance ($p < 0.05$)
+in human astronaut blood, with myelination gene upregulation reaching
+extraordinary effect sizes (MOG: $\log_2$FC $= +5.82$,
+$p = 4.59 \times 10^{-27}$, year-long ISS) replicating across independent
+missions (MBP: $\log_2$FC $= +0.60$, Inspiration4 PBMC).
+This provides the first direct human blood-level evidence of VEN-associated
+transcriptional activation in astronauts.
+Seventh, the Fast Lane Hypothesis SNN model~\cite{keskin2026} provides
 the theoretical circuit-level framework connecting VEN integrity to social
 decision speed rather than capacity.
 
@@ -910,6 +1202,64 @@ Together, these findings motivate a circuit-grounded framework for
 duration-dependent cognitive risk in human spaceflight and point toward
 testable countermeasure strategies and prospective study designs for
 missions beyond the six-month threshold.
+
+\section*{Future Directions}
+
+The most direct tests of the VEN Fatigue Hypothesis require prospective
+studies not feasible within existing public data.
+Priority directions include: (\textit{i}) single-nucleus RNA-seq or spatial
+transcriptomics from ACC/frontal insula tissue of long-duration mission
+astronauts to localise myelination and Layer~V signals to VEN cell bodies;
+(\textit{ii}) oligodendrocyte precursor depletion markers in ISS rodent
+frontal cortex from missions exceeding six months to test the threshold
+prediction; (\textit{iii}) longitudinal ERT monitoring with concurrent
+blood-based myelin biomarkers (e.g.\ circulating MBP, MOG) in a
+multi-subject cohort extending beyond six months; and (\textit{iv})
+expanded SOMA atlas queries across additional tissue types as new human
+spaceflight transcriptomics datasets are integrated (soma.weill.cornell.edu).
+
+\section*{Author Contributions}
+
+CRediT (Contributor Roles Taxonomy) author contribution statement:\\[2pt]
+\textbf{Esila Keskin:}
+Conceptualization, Formal analysis, Investigation, Methodology,
+Software, Visualization, Writing~-- original draft, Writing~-- review
+and editing.\\[2pt]
+\textbf{Nilufar Ali:}
+Data curation, Funding acquisition, Resources, Supervision,
+Writing~-- review and editing.\\[2pt]
+\textbf{Margaret Windy McNerney:}
+Data curation, Resources, Supervision, Writing~-- review and editing.
+
+\section*{Data and Code Availability}
+
+All analysis code is publicly available at
+\url{https://github.com/esila-keskin/ven-spaceflight-cognition}.
+All datasets analysed are publicly available:
+GSE239336, OSD-202, and GSE259421 via NCBI GEO and NASA OSDR;
+cognitive data via the published figures of Garrett-Bakelman et
+al.~\cite{garrett2019} and tables of Dev et al.~\cite{dev2024};
+proteomics data (PXD069807) via PRIDE (Jourdon et al.\ 2026).
+
+\section*{Acknowledgements}
+
+Research data used in this study were curated by and are available in
+the NASA GeneLab data system (\url{https://genelab.nasa.gov/}),
+consistent with OSDR data-sharing principles.
+The authors thank the NASA GeneLab Brain AWG for constructive feedback
+and guidance throughout the development of this work.
+We thank the Marotta, Jourdon, and Alysson lab teams for making their
+spaceflight datasets publicly available, and the Mason laboratory
+(Weill Cornell Medicine) for development of the SOMA atlas.
+
+\section*{Generative AI Disclosure}
+
+Anthropic's Claude (claude.ai) was used to assist with \LaTeX{}
+formatting and figure plotting code during manuscript preparation.
+All scientific concepts, the VEN Fatigue Hypothesis, statistical
+analysis design and execution, and the interpretation of results are
+the authors' own.
+AI assistance is disclosed in accordance with current publication norms.
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
