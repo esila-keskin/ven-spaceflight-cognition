@@ -26,19 +26,17 @@ Four independent datasets are tested:
 
 ```
 ven-spaceflight-cognition/
-  main.tex                       -- Paper LaTeX source
-  references.bib                 -- Bibliography
-  figures/                       -- Publication figures (PNG/PDF)
+  figures/ -- Publication figures (PNG/PDF)
     fig1_ert_paradox.png
     fig2_domain_specificity.png
     fig3_molecular_dissociation.png
     fig4_organoid_permutation.png
   data/raw/
     twins_cognitive_heatmap.csv  -- Digitised from Garrett-Bakelman et al. 2019, Fig 10B
-    dev2024_raw_scores.csv       -- From Dev et al. 2024, Table 2
+    dev2024_raw_scores.csv -- From Dev et al. 2024, Table 2
     GSE239336_FCT_GCvsFLT-SAL_DEanalysis.txt  -- ISS rodent DE analysis (NCBI GEO)
-    GLDS-202_...csv              -- OSD-202 (NASA OSDR) [gitignored, 134 MB]
-  results/                       -- Analysis outputs (JSON, CSV)
+    GLDS-202_...csv -- OSD-202 (NASA OSDR) [gitignored, 134 MB]
+  results/ -- Analysis outputs (JSON, CSV)
     gse239336_ven_signature.json
     osd202_ven_signature.json
     VEN_panel_Combined.csv
@@ -46,10 +44,10 @@ ven-spaceflight-cognition/
     VEN_panel_WithMicroglia.csv
     ...
   step1_create_cognitive_csvs.py -- Creates cognitive data CSVs
-  step2_run_analysis.py          -- Runs ISS rodent and OSD-202 analyses
-  step2_v2_run_analysis.py       -- Runs human organoid analysis (GSE259421)
-  make_paper_figures.py          -- Generates all four publication figures
-  ven_organoid_analysis.py       -- Supporting organoid analysis utilities
+  step2_run_analysis.py -- Runs ISS rodent and OSD-202 analyses
+  step2_v2_run_analysis.py -- Runs human organoid analysis (GSE259421)
+  make_paper_figures.py -- Generates all four publication figures
+  ven_organoid_analysis.py -- Supporting organoid analysis utilities
 ```
 
 ---
@@ -113,18 +111,6 @@ prior to accessing any of the four datasets:
 | Metabolic Support (n=6) | VDAC1, ATP2B2, SLC17A7, SNAP25, SYP, NRXN1 |
 
 NOS1 (direct VEN biochemical marker) tracked individually outside the panel.
-
----
-
-## Citation
-
-If you use this code or data, please cite:
-
-```
-Keskin, E. (2026). The Social Cognition Paradox in Long-Duration Spaceflight:
-A VEN Fatigue Hypothesis for Duration-Dependent Emotion Recognition Decline.
-[Preprint]
-```
 
 ---
 
