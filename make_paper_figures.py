@@ -4,7 +4,6 @@ Generates all four publication-ready figures for:
   "The Social Cognition Paradox in Long-Duration Spaceflight:
    A VEN Fatigue Hypothesis for Duration-Dependent Emotion
    Recognition Decline"
-  Keskin 2026
 
 OUTPUT
  
@@ -124,7 +123,7 @@ def fig1_ert_paradox():
     ax.set_title("A  340-day Mission (NASA Twins Study, $N=1$)", fontsize=10, fontweight="bold", loc="left")
     ax.annotate("$-1.8$ SD\n(late in-flight)",
                 xy=(2, vals_tw[2]),
-                xytext=(2.55, vals_tw[2] - 0.55),
+                xytext=(2.6, vals_tw[2] + 1.2),
                 fontsize=9, color="#E05252",
                 arrowprops=dict(arrowstyle="->", color="#E05252", lw=1.4))
     ax.legend(fontsize=8, frameon=False)
@@ -168,7 +167,7 @@ def fig2_domain_specificity():
     DOMAIN_COLOR = {
         "Social": "#E05252", "Memory": "#F5A623", "Working Mem.": "#F5A623",
         "Spatial": "#3A7FC1", "Reasoning": "#52C869", "Processing": "#9B59B6",
-        "Attention": "#1ABC9C", "Risk": "#2C3E50", "Motor": "#95A5A6",
+        "Attention": "#1ABC9C", "Risk": "#D68910", "Motor": "#717D7E",
     }
 
     speed = twins[(twins["metric"] == "speed") & twins["task"].isin(TASK_DOMAINS)].copy()
@@ -215,15 +214,15 @@ def fig2_domain_specificity():
         "ERT (Social)\nEarly: "
         f"{early_v[ert_pos]:+.1f} SD\nLate: {late_v[ert_pos]:+.1f} SD",
         xy=(ert_pos + w/2, late_v[ert_pos]),
-        xytext=(ert_pos + w/2 + 1.5, late_v[ert_pos] - 0.4),
+        xytext=(ert_pos + w/2 + 3.5, 0.8),
         fontsize=9, color="#E05252", fontweight="bold",
         arrowprops=dict(arrowstyle="->", color="#E05252", lw=1.4),
     )
-    save(fig, "fig2_domain_specificity")
+    save(fig, "fig4_domain_specificity")
 
 
  # FIGURE 3  Molecular dissociation: ISS frontal cortex vs ground-based analogue
-  def fig3_molecular_dissociation():
+def fig3_molecular_dissociation():
     print("Generating Figure 3: Molecular Dissociation...")
     with open("results/gse239336_ven_signature.json") as f:
         gse = json.load(f)
@@ -309,7 +308,7 @@ def fig2_domain_specificity():
     fig.suptitle("Figure 3  Myelination Upregulation Is Spaceflight-Specific in Mouse Frontal Cortex\n"
                  "ISS tissue shows a targeted myelination response absent in ground-based stress",
                  fontsize=10.5, fontweight="bold", y=1.02)
-    save(fig, "fig3_molecular_dissociation")
+    save(fig, "fig2_molecular_dissociation")
 
 
 # FIGURE 4  Organoid permutation specificity: VEN panel in GSE259421
@@ -428,19 +427,19 @@ def fig4_organoid_permutation():
     my_idx = cat_order.index("Myelination")
     ax.annotate("Layer V:\n+1.347** (6.17 SD)",
                 xy=(lv_idx, fc_vals[lv_idx]),
-                xytext=(lv_idx - 1.3, fc_vals[lv_idx] + 0.15),
+                xytext=(lv_idx + 0.65, fc_vals[lv_idx] - 0.45),
                 fontsize=8, color=CAT_COLORS["LayerVProjection"], fontweight="bold",
                 arrowprops=dict(arrowstyle="->", color=CAT_COLORS["LayerVProjection"], lw=1.2))
     ax.annotate("Myelination:\n-0.456* (-2.35 SD)\n(predicted direction)",
                 xy=(my_idx, fc_vals[my_idx]),
-                xytext=(my_idx + 0.8, fc_vals[my_idx] - 0.25),
+                xytext=(my_idx + 0.6, 0.28),
                 fontsize=8, color=CAT_COLORS["Myelination"], fontweight="bold",
                 arrowprops=dict(arrowstyle="->", color=CAT_COLORS["Myelination"], lw=1.2))
 
     fig.suptitle("Figure 4  VEN Gene Panel in Human iPSC-Derived Cortical Organoids (GSE259421, ISS vs Ground)\n"
                  "Layer V Projection genes 6.17 SD above null; Myelination downregulation matches a priori prediction",
                  fontsize=10, fontweight="bold", y=1.02)
-    save(fig, "fig4_organoid_permutation")
+    save(fig, "fig3_organoid_permutation")
 
 
 if __name__ == "__main__":
